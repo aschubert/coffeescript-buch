@@ -1,0 +1,17 @@
+<h1>Beispiel eines dynamischen Suchfeldes</h1>
+
+<p>
+	<%= content_tag :label, "Bitte geben Sie das Land an:" %>
+	<div class="country_auto_complete">
+		<%= tag 'input', 
+			:type => 'text', 
+			:id => 'country', 
+			:size => '30', 
+			:autocomplete => 'off', 
+			:data => {
+				:timeout => "30",
+				:url  => autocomplete_search_path
+			} %>
+		<ul></ul>
+	</div>
+</p>

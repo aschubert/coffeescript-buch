@@ -1,0 +1,33 @@
+// Place all the styles related to the autocomplete controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+div.country_auto_complete {
+	
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  
+  input {
+	  position: relative;
+	  top: 0px;
+	  left: 0px;
+	  margin: 0;
+  }
+  
+  ul {
+	  border: 1px solid #888;
+	  list-style-type: none;
+	  margin: 0;
+	  padding: 0;
+	  width: 300px;
+	  display: none;
+	  li {
+		  margin:0;
+		  padding:3px;
+	  }
+	  li.selected {
+		  background-color: #ddd;
+	  }
+  }
+}

@@ -1,0 +1,29 @@
+@import 'bootstrap';
+
+@media (min-width: 768px) {
+	.container {
+		max-width: 730px;
+	}
+}
+
+body {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+div.input-group {
+	padding-bottom: 5px;
+}
+
+input.form-control {
+	color: black;
+}
+
+input.form-control[disabled] {
+	background-color: #fabfc0;
+}
+
+input.done-true {
+	text-decoration: line-through;
+	background-color: #bfffbf !important;
+}

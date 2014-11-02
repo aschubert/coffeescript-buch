@@ -1,0 +1,9 @@
+<% url = Kap521::Application.routes.url_helpers %>
+
+jQuery ->
+	$('#order_country_id').change ->
+		$.ajax
+			url: "<%= url.order_update_states_path %>"
+			data:
+				country_id : $('#order_country_id').val()
+			dataType: "script"

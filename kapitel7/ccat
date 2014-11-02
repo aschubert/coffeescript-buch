@@ -1,0 +1,118 @@
+#!/usr/bin/env coffee
+
+class OptionParser
+	constructor: (parameters, args) ->	
+		@options = {}
+		@files = []
+		@parameters = parameters
+		@args = @normalize(args)
+		@args = @expand(args)
+		do @parse
+		@files.push process.stdin if @files.length is 0
+
+	normalize: (args) ->
+		normalized = []
+		for arg in args
+			if match = arg.match /^-([a-z]{2,})/
+				normalized.push '-' + arg for arg in match[1].split('')
+			else
+				normalized.push arg
+		normalized
+
+	expand: (args) ->
+		expanded = []
+		for arg in args
+			if match = arg.match /^-[a-z]/
+				old_size = expanded.length
+				expanded.push parameter[1] for parameter in @parameters when match[0] is parameter[0]
+				throw "unknown command line argument #{match[0]}" if expanded.length is old_size
+			else
+				expanded.push arg
+		expanded
+
+	parse: ->
+		@options[arg[2..-1]] = true for arg in @args when arg.match /^--/
+		@files.push arg for arg in @args when arg.match /^[^\-]/
+
+parameters = [
+		['-b', '--nonblank' , 'count all non empty lines']
+		['-n', '--number'   , 'count all lines']
+		['-s', '--squeeze'  , 'squeeze multiple empty lines to one']
+		['-v', '--version'  , 'print the version and exit']
+		['-h', '--help'     , 'print help screen and exit']
+	]
+
+parser = new OptionParser(parameters,process.argv[2..-1])
+
+VERSION = "0.1"
+path = require 'path'
+binary = path.basename process.argv[1]
+
+if parser.options.version
+	console.log "#{binary}: version #{VERSION}"
+	process.exit 0
+
+ 
+if parser.options.help
+	console.log "#{binary} [options] [files]"
+	console.log ""
+	console.log "options:"
+	spaces = "               "
+	for parameter in parameters
+		console.log " #{parameter[0]}, #{(parameter[1]+spaces)[0..15]} #{parameter[2]}"
+	process.exit 0
+
+fs = require 'fs'
+
+for file in parser.files
+	if typeof file is 'string'
+		fd = fs.openSync(file, 'r')
+		stdin = false
+	else
+		process.stdin.resume()
+		fd = process.stdin.fd
+		stdin = true
+
+
+	bufferSize = 8192
+	buffer = new Buffer(bufferSize)
+	bytesRead = 1
+	position = 0
+	lines = []
+	while bytesRead > 0
+		if stdin
+			bytesRead = fs.readSync(fd, buffer, 0, bufferSize)
+		else
+			bytesRead = fs.readSync(fd, buffer, 0, bufferSize, position)
+		if bytesRead > 0
+			lines.push buffer.toString('utf8',0,bytesRead)
+		position += bytesRead
+	fs.closeSync(fd) unless stdin
+
+	lines = lines.join().split(/\r?\n/)
+
+	if parser.options.squeeze
+		first = true
+		i = 0
+		while i < lines.length
+			console.log i
+			if lines[i].length is 0
+				if first
+					first = false
+				else
+					lines.splice(i,1)
+					i--
+			else
+				first = true
+			i++
+
+	last_line = lines.pop()
+	lines.push last_line if last_line.length > 0
+
+	number = 1
+	for line in lines
+		if parser.options.number or (parser.options.nonblank and line.length > 0)
+			console.log ('      '+number+'  ')[-9..] + line
+			number += 1
+		else
+			console.log line

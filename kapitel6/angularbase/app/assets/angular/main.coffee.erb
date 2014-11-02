@@ -1,0 +1,10 @@
+helloworld = angular.module "helloworld", []
+
+helloworld.controller "HelloController", ($scope) ->
+	$scope.name = "World"
+
+$(document).on 'page:load', ->
+	$('[ng-app]').each ->
+		module = $(@).attr('ng-app')
+		angular.bootstrap(@,[module])
+

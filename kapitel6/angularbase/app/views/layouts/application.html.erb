@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html ng-app="helloworld">
+<head>
+  <title>Angularbase</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body ng-controller="HelloController">
+	<div class="container">
+		<h1>Hello {{name}}</h1>
+		<input ng-model="name">		
+	</div>
+</body>
+</html>

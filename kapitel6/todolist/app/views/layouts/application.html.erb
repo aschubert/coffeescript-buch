@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html ng-app="todo">
+<head>
+  <title>Simple ToDo-List-Example</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+	<!-- Delete Dialog -->
+	<script type="text/ng-template" id="delete.html">
+		<div class="modal-header">
+			<h3 class="modal-title">Are you sure?</h3>
+		</div>
+		<div class="modal-body">
+			<h4>You are about to delete {{delete.task.name}}.</h4>
+			<p>Please confirm the deletion. This operation cannot be undone!</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-danger" ng-click="delete.ok()">OK</button>
+			<button class="btn btn-primary" ng-click="delete.cancel()">Cancel</button>
+		</div>
+	</script>
+
+	<div class="container" ng-controller="TaskController as tasks">
+		<!-- Page Header -->
+		<div class="page-header">
+			<h3>Simple ToDo-List-Example</h3>
+		</div>
+
+		<!-- ToDo-List -->
+		<div class="row">
+			<div style="padding-bottom: 20px" class="col-md-9 col-md-offset-2">
+				<input 	type="text"
+						ng-model="tasks.filter"
+						class="form-control"
+						placeholder="Enter Search Text">
+			</div>
+			<div style="padding-bottom: 20px" class="col-md-9 col-md-offset-2">
+				There is a total of {{tasks.remaining()}} from {{tasks.all.length}} tasks unfinished!
+			</div>
+
+			<div class="col-md-9 col-md-offset-2" ng-repeat="task in tasks.all | startsWith:{name: tasks.filter}">
+				<div class="input-group">
+					<input 	type="text" 
+							ng-model="task.name"
+							ng-disabled="task.disabled"
+							ng-blur="tasks.blur(task)"
+							auto-focus="!task.disabled"
+							class="form-control done-{{task.done}}">
+					<span class="input-group-btn">
+						<glyph-button	class="btn-default" 
+										data-name="ok"
+										ng-disabled="!task.disabled"
+										ng-click="tasks.toggleDone(task)">
+						</glyph-button>
+						<glyph-button	class="btn-default" 
+										ng-show="task.disabled"
+									 	data-name="pencil"
+										ng-click="tasks.edit(task)">
+						</glyph-button>
+						<glyph-button	class="btn-default" 
+										ng-hide="task.disabled"
+									 	data-name="floppy-disk"
+										ng-mousedown="tasks.save(task)">
+						</glyph-button>
+						<glyph-button 	class="btn-default"
+										data-name="remove"
+										ng-disabled="!task.disabled"
+										ng-click="tasks.delete(task)">
+						</glyph-button>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Add new ToDo Form -->
+		<div class="row">
+			<form style="padding-top: 20px" role="form" class="form-horizontal" ng-submit="tasks.add()">
+				<label for="task" class="col-lg-2 control-label">Task</label>
+				<div class="col-lg-9">
+					<div class="input-group">
+						<input 	type="text" 
+								class="form-control"
+								ng-model="tasks.name"
+								placeholder="Enter New Task">
+						<span class="input-group-btn">
+							<glyph-button 	class="btn-primary" 
+											type="submit"
+											data-name="plus">
+							</glyph-button>
+						</span>
+					</div>
+				</div>
+			</form>
+		</div>
+
+	</div>
+
+</body>
+</html>

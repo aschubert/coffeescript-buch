@@ -1,0 +1,13 @@
+<h1>Bestellung</h1>
+
+<p>Bitte geben Sie hier Ihre Bestelldaten ein:</p>
+<%= form_for :order do |f| %>
+<p>
+	<label for="order_country_id">Land:</label>
+	<%= f.collection_select :country_id, @countries, :id, :name, {:prompt  => "Bitte wählen Sie..."} %>
+</p>
+<p>
+	<label for="order_state_id">Bundesland/Staat:</label>
+	<%= f.collection_select :state_id, @states, :id, :name, {:prompt  => "Bitte wählen Sie..."} %>
+</p>
+<% end %>

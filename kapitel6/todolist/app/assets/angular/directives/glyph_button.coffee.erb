@@ -1,0 +1,8 @@
+@todo.directive "glyphButton", ->
+	restrict: 'E'
+	scope: true
+	templateUrl: '<%= asset_path('templates/glyphbutton.html') %>'
+	replace: true
+	transclude: false
+	link: (scope,element) -> 
+		scope.name = $(element).data("name")

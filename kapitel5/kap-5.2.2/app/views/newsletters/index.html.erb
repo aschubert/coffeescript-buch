@@ -1,0 +1,34 @@
+<h1>Newsletter Anmeldung</h1>
+
+<p>Bitte geben Sie hier Ihre Daten ein:</p>
+<p id="newsletter_error" style="color:red">
+	
+</p>
+<%= form_for @newsletter do |f| %>
+<div class="field">
+	<%= f.label "Anrede:" %>
+	<%= f.select :salutation, ["Herr","Frau"], {:prompt  => "Bitte wählen Sie..."} %>
+</div>
+<div class="field">
+  <%= f.label "Vorname:" %>
+  <%= f.text_field :firstname %>
+</div>
+<div class="field">
+  <%= f.label "Nachname:" %>
+  <%= f.text_field :lastname %>
+</div>
+<div class="field">
+  <%= f.label "Geburtstag:" %><sup>*</sup>
+  <%= f.text_field :birthday %>
+</div>
+<div class="field">
+  <%= f.label "Email:" %>
+  <%= f.text_field :email %>
+</div>
+<div class="actions">
+  <%= f.submit "Zum Newsletter anmelden", :id  => 'newsletter_submit' %>
+</div>
+<% end %>
+<p>
+	<sup>*</sup>Angabe freiwillig
+</p>

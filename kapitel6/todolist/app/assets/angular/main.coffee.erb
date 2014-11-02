@@ -1,0 +1,13 @@
+@todo = angular.module "todo", ['ngResource','ui.bootstrap']
+
+@todo.config ($httpProvider) ->
+	authToken = $("meta[name=\"csrf-token\"]").attr("content")
+	$httpProvider.defaults.headers.common["X-CSRF-TOKEN"] = authToken
+	$httpProvider.defaults.headers.patch = {
+         'Content-Type': 'application/json;charset=utf-8'
+    }
+
+$(document).on 'page:load', ->
+	$('[ng-app]').each ->
+		module = $(@).attr('ng-app')
+		angular.bootstrap(@,[module])
